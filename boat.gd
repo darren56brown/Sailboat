@@ -26,31 +26,36 @@ func _integrate_forces(state):
 	
 	rudder_pivot.rotation = deg_to_rad(rudder_angle)
 	
-	# --- 3. RUDDER PHYSICS (LIFT MODEL) ---
-	var stern_offset_local = Vector2(-24, 0) 
+		# --- 3. RUDDER PHYSICS (LEVER MODEL) ---
+	var stern_offset_local = Vector2(-18, 0) # The hinge point
+	var rudder_length = 10.0                 # The length of your rudder blade
+	var center_offset = rudder_length / 2.0  # Center of pressure is halfway
+	
+	# Calculate where the MIDDLE of the rudder is in boat-local space
+	var rudder_dir_local = Vector2.RIGHT.rotated(deg_to_rad(rudder_angle))
+	var rudder_center_local = stern_offset_local - (rudder_dir_local * center_offset)
+	
 	var global_vel = state.linear_velocity
 	var local_vel = global_vel.rotated(-rotation)
 	
-	# A. Get the "Face" of the rudder (The Normal Vector)
-	# Vector2.UP is the side of the rudder when it's pointing East (0 deg)
+	# A. Get the "Face" (Normal) of the rudder
 	var rudder_normal_local = Vector2.UP.rotated(deg_to_rad(rudder_angle))
 	
-	# B. Calculate "Flow Pressure" using Dot Product
-	# This measures how much the water velocity hits the flat face of the rudder
+	# B. Calculate Pressure
 	var flow_pressure = local_vel.dot(rudder_normal_local)
 	
-	# C. Resulting Force (always pushes perpendicular to the rudder blade)
-	# We use negative efficiency here so that 'turning right' pushes the stern 'left'
+	# C. Resulting Force
 	var rudder_force_local = rudder_normal_local * flow_pressure * -rudder_efficiency
 	
-	# Apply force to the physics engine
-	apply_force(rudder_force_local.rotated(rotation), stern_offset_local.rotated(rotation))
+	# Apply force at the ACTUAL CENTER of the rudder, not the hinge
+	# We rotate the local center point into global space
+	var force_pos_global = rudder_center_local.rotated(rotation)
+	apply_force(rudder_force_local.rotated(rotation), force_pos_global)
 
-	# --- DRAWING THE ARROW ---
-	rudder_arrow.position = stern_offset_local
-	# We use a negative scale here to ensure the arrow points the direction of the "push"
-	var arrow_scale = -.5 
-	rudder_arrow.set_point_position(1, rudder_force_local * arrow_scale)
+	# --- 4. UPDATE THE DEBUG ARROW ---
+	# Move the arrow's start to the center of the rudder blade
+	rudder_arrow.position = rudder_center_local
+	rudder_arrow.set_point_position(1, rudder_force_local * -0.5)
 	
 	# --- 4. HYDRODYNAMICS (Tracking) ---
 	local_vel.x *= 0.99  # Forward glide

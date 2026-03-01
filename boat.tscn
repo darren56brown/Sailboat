@@ -33,7 +33,7 @@ drag_vertical_enabled = true
 position = Vector2(-18, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="RudderPivot" unique_id=840007207]
-position = Vector2(-5, 0)
+position = Vector2(-5.5, 0)
 texture = ExtResource("3_henu8")
 
 [node name="RudderForceArrow" type="Line2D" parent="." unique_id=1141275517]
