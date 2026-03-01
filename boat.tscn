@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cthpwl5lofngj"]
+
+[ext_resource type="Script" uid="uid://blhx1vo72opc5" path="res://boat.gd" id="1_viw7v"]
+[ext_resource type="Texture2D" uid="uid://6dinmyjejpvw" path="res://boat.png" id="2_viw7v"]
+[ext_resource type="Texture2D" uid="uid://bkd2dpkvhm481" path="res://rudder.png" id="3_henu8"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_henu8"]
+points = PackedVector2Array(7.000001, 23, 11.000001, 14.999999, 11, -4.000001, 5.999999, -18, -1.0490733e-06, -24, -6.000001, -18, -11, -3.9999995, -10.999999, 15.000001, -6.999999, 23)
+
+[node name="Boat" type="RigidBody2D" unique_id=28938317]
+collision_layer = 2
+gravity_scale = 0.0
+center_of_mass_mode = 1
+can_sleep = false
+linear_damp = 2.0
+angular_damp = 2.0
+script = ExtResource("1_viw7v")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=180280925]
+position = Vector2(5, 0)
+texture = ExtResource("2_viw7v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=801332891]
+position = Vector2(4, 0)
+rotation = 1.5707964
+shape = SubResource("ConvexPolygonShape2D_henu8")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1711751124]
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+
+[node name="RudderPivot" type="Marker2D" parent="." unique_id=1789706940]
+position = Vector2(-18, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="RudderPivot" unique_id=840007207]
+position = Vector2(-5, 0)
+texture = ExtResource("3_henu8")
+
+[node name="RudderForceArrow" type="Line2D" parent="." unique_id=1141275517]
+z_index = 5
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
+default_color = Color(1, 0, 0, 1)
