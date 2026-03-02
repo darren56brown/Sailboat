@@ -1,19 +1,27 @@
 extends RigidBody2D
 
-@export var wind_velocity = Vector2(150, 0)
-@export var rudder_rotation_rate = 120.0 #deg/sec
-@export var max_rudder_angle_deg = 60.0
+@export var wind_velocity = Vector2(200, 0)
+@export var rudder_rotation_rate = 100.0 #deg/sec
+@export var max_rudder_angle_deg = 45.0
 @export var rudder_efficiency = 2.0
 @export var rudder_hinge_position = Vector2(-18, 0)
+@export var drag_center_position = Vector2(-2, 0) #Drag a bit behind the cg
 @export var rudder_length = 10
-@export var water_velocity = Vector2(0, 5)
+@export var water_velocity = Vector2(0, 0)
+@export var hull_drag = 8.0
+
+#How many times harder to push sideways? This causes physics
+#to go unstable at values over 10 for some reason
+@export var hull_drag_ratio = 8.0 
 
 @onready var rudder_pivot = $RudderPivot
 @onready var rudder_arrow = $RudderForceArrow
+@onready var drag_arrow = $DragForceArrow
 
 var rudder_angle_deg = 0.0
 var is_centering: bool = false
 var rudder_force = Vector2()
+var drag_force = Vector2()
 var rudder_center_position = Vector2()
 
 #Computed as often as possible. Use for graphics updates and to recore from UI
@@ -30,7 +38,10 @@ func _process(delta: float):
 	
 	#Update rudder force arrow graphics
 	rudder_arrow.position = rudder_center_position
-	rudder_arrow.set_point_position(1, rudder_force * -0.5)
+	rudder_arrow.set_point_position(1, rudder_force * -0.25)
+	
+	drag_arrow.position = drag_center_position
+	drag_arrow.set_point_position(1, drag_force * -0.25)
 	
 #Computed every physics tick. Do everything here except set state varaibles
 func _physics_process(delta: float):
@@ -52,27 +63,24 @@ func _physics_process(delta: float):
 		
 #Also computed every physics tick. Update state variables here
 func _integrate_forces(state):
-	var velocity_vector = state.linear_velocity
-	velocity_vector = velocity_vector.rotated(-rotation)
+	var flow_velocity = (state.linear_velocity.rotated(-rotation) -
+		water_velocity.rotated(-rotation))
 	
+	#rudder force
 	var rudder_unit_normal = Vector2.UP.rotated(deg_to_rad(rudder_angle_deg))
-	var water_velocity_loc = water_velocity.rotated(-rotation)
-	
-	var flow_velocity = velocity_vector - water_velocity_loc
 	var rudder_normal_velocity = rudder_unit_normal * flow_velocity.dot(rudder_unit_normal)
-	
 	rudder_force = rudder_normal_velocity * -rudder_efficiency
 	apply_force(rudder_force.rotated(rotation),
 		rudder_center_position.rotated(rotation))
 
-	#reduce flow velocity due to drag
-	flow_velocity.x *= 0.95  # Forward glide
-	flow_velocity.y *= 0.45  # Lateral resistance
+	#drag force
+	drag_force.x = flow_velocity.x * -hull_drag
+	drag_force.y = flow_velocity.y * -hull_drag * hull_drag_ratio
+	apply_force(drag_force.rotated(rotation),
+		drag_center_position.rotated(rotation))
 	
-	#compute new velocity vector and apply it
-	velocity_vector = flow_velocity + water_velocity_loc
-	state.linear_velocity = velocity_vector.rotated(rotation)
+	#drag torque
+	apply_torque(state.angular_velocity * -1000)
 	
-	# --- 5. DAMPING & ENVIRONMENT ---
-	state.angular_velocity *= 0.92
+	#wind force
 	apply_central_force(wind_velocity)

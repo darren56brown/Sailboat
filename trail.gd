@@ -5,13 +5,17 @@ extends Line2D
 
 @onready var target = get_node(target_path)
 
-func _process(_delta):
-	# 1. Get the boat's current global position
+var total_delta = 0
+
+func _physics_process(_delta):
+	total_delta += _delta
+	if total_delta < .075:
+		return
+	
+	total_delta = 0
 	var pos = target.global_position
 	
-	# 2. Add the new point to the line
 	add_point(pos)
 	
-	# 3. If the trail is too long, remove the oldest point
 	if points.size() > max_points:
 		remove_point(0)

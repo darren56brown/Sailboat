@@ -11,9 +11,8 @@ points = PackedVector2Array(7.000001, 23, 11.000001, 14.999999, 11, -4.000001, 5
 collision_layer = 2
 gravity_scale = 0.0
 center_of_mass_mode = 1
+inertia = 200.0
 can_sleep = false
-linear_damp = 2.0
-angular_damp = 2.0
 script = ExtResource("1_viw7v")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=180280925]
@@ -37,6 +36,14 @@ position = Vector2(-5.5, 0)
 texture = ExtResource("3_henu8")
 
 [node name="RudderForceArrow" type="Line2D" parent="." unique_id=1141275517]
+visible = false
+z_index = 5
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="DragForceArrow" type="Line2D" parent="." unique_id=1252359314]
+visible = false
 z_index = 5
 points = PackedVector2Array(0, 0, 0, 0)
 width = 2.0
