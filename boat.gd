@@ -5,14 +5,15 @@ extends RigidBody2D
 @export var max_rudder_angle_deg = 45.0
 @export var rudder_efficiency = 2.0
 @export var rudder_hinge_position = Vector2(-18, 0)
-@export var drag_center_position = Vector2(-2, 0) #Drag a bit behind the cg
+#@export var drag_center_position = Vector2(-2, 0) #Drag a bit behind the cg
+@export var drag_center_position = Vector2(0, 0)
 @export var rudder_length = 10
 @export var water_velocity = Vector2(0, 0)
 @export var hull_drag = 8.0
 
 #How many times harder to push sideways? This causes physics
 #to go unstable at values over 10 for some reason
-@export var hull_drag_ratio = 8.0 
+@export var hull_drag_ratio = 5.0 
 
 @onready var rudder_pivot = $RudderPivot
 @onready var rudder_arrow = $RudderForceArrow

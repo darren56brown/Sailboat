@@ -4,11 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://6dinmyjejpvw" path="res://boat.png" id="2_viw7v"]
 [ext_resource type="Texture2D" uid="uid://bkd2dpkvhm481" path="res://rudder.png" id="3_henu8"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_henu8"]
+friction = 0.25
+bounce = 1.0
+
 [sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_henu8"]
 points = PackedVector2Array(7.000001, 23, 11.000001, 14.999999, 11, -4.000001, 5.999999, -18, -1.0490733e-06, -24, -6.000001, -18, -11, -3.9999995, -10.999999, 15.000001, -6.999999, 23)
 
 [node name="Boat" type="RigidBody2D" unique_id=28938317]
 collision_layer = 2
+physics_material_override = SubResource("PhysicsMaterial_henu8")
 gravity_scale = 0.0
 center_of_mass_mode = 1
 inertia = 200.0
