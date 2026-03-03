@@ -4,4 +4,25 @@
 
 [node name="Main" type="Node" unique_id=182835630]
 
-[node name="World" parent="." unique_id=1897879694 instance=ExtResource("1_ig7tw")]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1176011715]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=2068342953]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer" unique_id=1561851078]
+handle_input_locally = false
+size = Vector2i(948, 648)
+render_target_update_mode = 4
+
+[node name="World" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1897879694 instance=ExtResource("1_ig7tw")]
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer" unique_id=2073590489]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2

@@ -32,6 +32,11 @@ shape = SubResource("ConvexPolygonShape2D_henu8")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1711751124]
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_top_margin = 0.1
+drag_right_margin = 0.1
+drag_bottom_margin = 0.1
+editor_draw_drag_margin = true
 
 [node name="RudderPivot" type="Marker2D" parent="." unique_id=1789706940]
 position = Vector2(-18, 0)
