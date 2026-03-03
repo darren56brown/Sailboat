@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SailboatScroller"
-run/main_scene="uid://bl0pkty8dbb1w"
+run/main_scene="uid://daotbw3lhrxb8"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [display]
