@@ -17,7 +17,6 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 [display]
 
 window/stretch/mode="canvas_items"
-window/stretch/scale=2.0
 
 [input]
 
